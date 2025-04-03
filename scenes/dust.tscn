@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3 uid="uid://jk61ucobn75h"]
+
+[ext_resource type="Texture2D" uid="uid://bg7jnxakj2dbs" path="res://Assets/landdustparticle.png" id="1_ax0jj"]
+[ext_resource type="Script" path="res://scripts/dust.gd" id="2_rtov3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vrl4j"]
+atlas = ExtResource("1_ax0jj")
+region = Rect2(0, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ivrw5"]
+atlas = ExtResource("1_ax0jj")
+region = Rect2(160, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mhqdb"]
+atlas = ExtResource("1_ax0jj")
+region = Rect2(320, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qfdjb"]
+atlas = ExtResource("1_ax0jj")
+region = Rect2(480, 0, 160, 160)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8ycyf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vrl4j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ivrw5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mhqdb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qfdjb")
+}],
+"loop": false,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="Dust" type="AnimatedSprite2D"]
+texture_filter = 1
+position = Vector2(16.5, 14)
+scale = Vector2(0.19375, 0.175)
+sprite_frames = SubResource("SpriteFrames_8ycyf")
+autoplay = "default"
+frame = 3
+frame_progress = 1.0
+script = ExtResource("2_rtov3")
+
+[connection signal="animation_finished" from="." to="." method="_on_animation_finished"]

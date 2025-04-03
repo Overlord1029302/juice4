@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://dnpxcgcpi5fy7"]
+
+[ext_resource type="PackedScene" uid="uid://d1ln5x6q6ewfj" path="res://scenes/upsidedownspike.tscn" id="1_dhk02"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Node2D2" parent="." instance=ExtResource("1_dhk02")]
+
+[node name="Node2D3" parent="." instance=ExtResource("1_dhk02")]
+position = Vector2(25, 0)
+
+[node name="Node2D4" parent="." instance=ExtResource("1_dhk02")]
+position = Vector2(50, 0)
+
+[node name="Node2D5" parent="." instance=ExtResource("1_dhk02")]
+position = Vector2(75, 0)
+
+[node name="Node2D6" parent="." instance=ExtResource("1_dhk02")]
+position = Vector2(100, 0)

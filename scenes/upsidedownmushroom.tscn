@@ -1,0 +1,78 @@
+[gd_scene load_steps=10 format=3 uid="uid://4juqf8lm11wh"]
+
+[ext_resource type="Script" path="res://scripts/upsidedownmushroom.gd" id="1_aft7m"]
+[ext_resource type="Texture2D" uid="uid://ch8h7kmhxwc5l" path="res://Assets/mushrooms.png" id="1_mhws1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8jjbk"]
+atlas = ExtResource("1_mhws1")
+region = Rect2(0, 0, 53, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sw84a"]
+atlas = ExtResource("1_mhws1")
+region = Rect2(159, 0, 53, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_osski"]
+atlas = ExtResource("1_mhws1")
+region = Rect2(0, 0, 53, 160)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_itwq4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8jjbk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sw84a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_osski")
+}],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bve2q"]
+radius = 3.0
+height = 56.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_nlofj"]
+radius = 27.0
+height = 54.0
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_haxow"]
+a = Vector2(0, -29)
+
+[node name="Node2D" type="StaticBody2D"]
+script = ExtResource("1_aft7m")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(2, 122)
+rotation = -3.14159
+sprite_frames = SubResource("SpriteFrames_itwq4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2, 45)
+rotation = -1.5708
+shape = SubResource("CapsuleShape2D_bve2q")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(1, 61)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_nlofj")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+collision_layer = 128
+collision_mask = 128
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+position = Vector2(-31, 70)
+shape = SubResource("SegmentShape2D_haxow")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="CharacterBody2D"]
+position = Vector2(37, 70)
+shape = SubResource("SegmentShape2D_haxow")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

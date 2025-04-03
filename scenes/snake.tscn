@@ -1,0 +1,168 @@
+[gd_scene load_steps=17 format=3 uid="uid://dbnrv66vwehag"]
+
+[ext_resource type="Script" path="res://scripts/snake.gd" id="1_2mgyj"]
+[ext_resource type="Texture2D" uid="uid://di0b2p3xj0mqw" path="res://Assets/snakesheet.png" id="2_ek5rq"]
+[ext_resource type="Script" path="res://scripts/health_bar.gd" id="3_dhe52"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kka2v"]
+atlas = ExtResource("2_ek5rq")
+region = Rect2(960, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f4q4j"]
+atlas = ExtResource("2_ek5rq")
+region = Rect2(1120, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4s1a2"]
+atlas = ExtResource("2_ek5rq")
+region = Rect2(320, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0fpeg"]
+atlas = ExtResource("2_ek5rq")
+region = Rect2(480, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sx5uk"]
+atlas = ExtResource("2_ek5rq")
+region = Rect2(0, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wuvk0"]
+atlas = ExtResource("2_ek5rq")
+region = Rect2(160, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ujlgo"]
+atlas = ExtResource("2_ek5rq")
+region = Rect2(640, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dwlcy"]
+atlas = ExtResource("2_ek5rq")
+region = Rect2(800, 0, 160, 160)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_y3e3e"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kka2v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f4q4j")
+}],
+"loop": true,
+"name": &"deal_damage",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4s1a2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0fpeg")
+}],
+"loop": true,
+"name": &"hurt",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sx5uk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wuvk0")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ujlgo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dwlcy")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jffpl"]
+size = Vector2(14.5, 28.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tow8c"]
+size = Vector2(20, 27)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_q4r35"]
+radius = 222.009
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ghgb4"]
+size = Vector2(195, 125)
+
+[node name="Node2D" type="CharacterBody2D" groups=["enemies"]]
+script = ExtResource("1_2mgyj")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(6.2, 4.16)
+scale = Vector2(0.235, 0.198)
+sprite_frames = SubResource("SpriteFrames_y3e3e")
+animation = &"deal_damage"
+
+[node name="DirectionTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="AttackArea" type="Area2D" parent="."]
+
+[node name="left" type="CollisionShape2D" parent="AttackArea"]
+position = Vector2(-15.75, 6)
+shape = SubResource("RectangleShape2D_jffpl")
+disabled = true
+
+[node name="right" type="CollisionShape2D" parent="AttackArea"]
+position = Vector2(36, 5.75)
+shape = SubResource("RectangleShape2D_jffpl")
+disabled = true
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+self_modulate = Color(0, 0.735584, 0.346493, 1)
+offset_left = -28.0
+offset_top = -41.0
+offset_right = 120.0
+offset_bottom = -14.0
+scale = Vector2(0.5, 0.5)
+max_value = 10.0
+show_percentage = false
+script = ExtResource("3_dhe52")
+
+[node name="Label" type="Label" parent="HealthBar"]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 2.0
+offset_right = 92.0
+offset_bottom = 25.0
+text = "100"
+horizontal_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(8, 4.5)
+shape = SubResource("RectangleShape2D_tow8c")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+position = Vector2(11, -10)
+shape = SubResource("CircleShape2D_q4r35")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(13, -1)
+shape = SubResource("RectangleShape2D_ghgb4")
+
+[node name="AttackTimer" type="Timer" parent="." groups=["enemies"]]
+wait_time = 0.3
+
+[connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]
+[connection signal="body_exited" from="AttackArea" to="." method="_on_body_exited"]
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
+[connection signal="timeout" from="AttackTimer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="AttackTimer" to="." method="on_timer_timeout"]

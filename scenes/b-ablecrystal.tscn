@@ -1,0 +1,51 @@
+[gd_scene load_steps=9 format=3 uid="uid://cj2n3tj0erx52"]
+
+[ext_resource type="Script" path="res://scripts/b_ablecrystal.gd" id="1_kfhp1"]
+[ext_resource type="Texture2D" uid="uid://b1ikclhcslui8" path="res://Assets/b-ablecrystal.png" id="1_ydjdv"]
+[ext_resource type="PackedScene" uid="uid://bikvln8mgacls" path="res://scenes/fragments.tscn" id="2_f8kr3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bl7qn"]
+atlas = ExtResource("1_ydjdv")
+region = Rect2(0, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6c1db"]
+atlas = ExtResource("1_ydjdv")
+region = Rect2(160, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_spqg4"]
+atlas = ExtResource("1_ydjdv")
+region = Rect2(320, 0, 160, 160)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8854t"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bl7qn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6c1db")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_spqg4")
+}],
+"loop": false,
+"name": &"default",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dl1mk"]
+size = Vector2(87, 157)
+
+[node name="Node2D" type="Node2D" groups=["breakable"]]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." groups=["breakable"]]
+z_index = -3
+script = ExtResource("1_kfhp1")
+fragment_scene = ExtResource("2_f8kr3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="StaticBody2D"]
+sprite_frames = SubResource("SpriteFrames_8854t")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(-6.5, -0.5)
+shape = SubResource("RectangleShape2D_dl1mk")

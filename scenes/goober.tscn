@@ -1,0 +1,148 @@
+[gd_scene load_steps=15 format=3 uid="uid://cichfryy02fyi"]
+
+[ext_resource type="Script" path="res://scripts/goober.gd" id="1_gvw1m"]
+[ext_resource type="Texture2D" uid="uid://bji2elk0185ih" path="res://Assets/goober.png" id="2_3lt77"]
+[ext_resource type="Script" path="res://scripts/health_bar.gd" id="3_nednp"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7y56n"]
+atlas = ExtResource("2_3lt77")
+region = Rect2(640, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tqogb"]
+atlas = ExtResource("2_3lt77")
+region = Rect2(800, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_01haa"]
+atlas = ExtResource("2_3lt77")
+region = Rect2(320, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2xvqw"]
+atlas = ExtResource("2_3lt77")
+region = Rect2(480, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ttcoh"]
+atlas = ExtResource("2_3lt77")
+region = Rect2(0, 0, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5o7gt"]
+atlas = ExtResource("2_3lt77")
+region = Rect2(160, 0, 160, 160)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ywddm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7y56n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tqogb")
+}],
+"loop": true,
+"name": &"deal_damage",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_01haa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2xvqw")
+}],
+"loop": true,
+"name": &"hurt",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ttcoh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5o7gt")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6ou0y"]
+size = Vector2(22.5, 42)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5qpyp"]
+size = Vector2(20, 29)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_askt6"]
+radius = 222.009
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_msqkv"]
+size = Vector2(195, 125)
+
+[node name="Node2D" type="CharacterBody2D" groups=["enemies"]]
+script = ExtResource("1_gvw1m")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(6.2, 4.16)
+scale = Vector2(0.235, 0.198)
+sprite_frames = SubResource("SpriteFrames_ywddm")
+animation = &"deal_damage"
+
+[node name="DirectionTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="AttackArea" type="Area2D" parent="."]
+
+[node name="left" type="CollisionShape2D" parent="AttackArea"]
+position = Vector2(-10.75, 13)
+shape = SubResource("RectangleShape2D_6ou0y")
+disabled = true
+
+[node name="right" type="CollisionShape2D" parent="AttackArea"]
+position = Vector2(29, 12.5)
+shape = SubResource("RectangleShape2D_6ou0y")
+disabled = true
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+self_modulate = Color(0, 0.735584, 0.346493, 1)
+offset_left = -28.0
+offset_top = -41.0
+offset_right = 120.0
+offset_bottom = -14.0
+scale = Vector2(0.5, 0.5)
+max_value = 10.0
+show_percentage = false
+script = ExtResource("3_nednp")
+
+[node name="Label" type="Label" parent="HealthBar"]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 2.0
+offset_right = 92.0
+offset_bottom = 25.0
+text = "100"
+horizontal_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(8, 5.5)
+shape = SubResource("RectangleShape2D_5qpyp")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+position = Vector2(11, -10)
+shape = SubResource("CircleShape2D_askt6")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(13, -1)
+shape = SubResource("RectangleShape2D_msqkv")
+
+[node name="AttackTimer" type="Timer" parent="." groups=["enemies"]]
+wait_time = 0.3
+
+[connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]
+[connection signal="body_exited" from="AttackArea" to="." method="_on_body_exited"]
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
+[connection signal="timeout" from="AttackTimer" to="." method="on_timer_timeout"]
